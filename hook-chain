@@ -2,13 +2,14 @@
 
 hookname=`basename $0`
 
-FILE=`mktemp -t ${hookname}` || exit 1
+FILE=`mktemp -t ${hookname}.XXXXXX` || exit 1
 trap 'rm -f $FILE' EXIT
 cat - > $FILE
 
 # Mungy path so I can run this outside of git
 for hook in $GIT_DIR/hooks/bin/$hookname.*
 do
+  echo $hook
   if test -x "$hook"; then
     cat $FILE | $hook "$@"
     status=$?
